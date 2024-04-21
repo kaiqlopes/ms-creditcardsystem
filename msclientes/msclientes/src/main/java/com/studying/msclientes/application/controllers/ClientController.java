@@ -28,7 +28,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody ClientSaveDTO dto) {
-        Client client = service.save(dto);
+        ClientDTO client = service.save(dto);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .query("cpf={cpf}")

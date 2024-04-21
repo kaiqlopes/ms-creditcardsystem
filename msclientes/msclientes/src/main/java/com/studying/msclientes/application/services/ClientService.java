@@ -18,10 +18,10 @@ public class ClientService {
     private final ClientRepository repository;
 
     @Transactional
-    public Client save(ClientSaveDTO dto) {
+    public ClientDTO save(ClientSaveDTO dto) {
         Client entity = dto.toModel();
         entity = repository.save(entity);
-        return entity;
+        return new ClientDTO(entity);
     }
 
     public ClientDTO getByCpf(String cpf) {
