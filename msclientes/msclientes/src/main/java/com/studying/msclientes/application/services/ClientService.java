@@ -5,9 +5,9 @@ import com.studying.msclientes.application.dtos.ClientSaveDTO;
 import com.studying.msclientes.domain.Client;
 import com.studying.msclientes.exceptions.ResourceNotFoundException;
 import com.studying.msclientes.infra.repositories.ClientRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,10 +24,11 @@ public class ClientService {
         return new ClientDTO(entity);
     }
 
+    @Transactional(readOnly = true)
     public ClientDTO getByCpf(String cpf) {
         Optional<Client> entity =  repository.findByCpf(cpf);
         if (entity.isEmpty()) {
-            throw new ResourceNotFoundException("Inexistent resource");
+            throw new ResourceNotFoundException("Nonexistent resource");
         }
 
         return new ClientDTO(entity.get());

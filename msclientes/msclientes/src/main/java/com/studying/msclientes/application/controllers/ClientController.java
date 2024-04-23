@@ -3,7 +3,6 @@ package com.studying.msclientes.application.controllers;
 import com.studying.msclientes.application.dtos.ClientDTO;
 import com.studying.msclientes.application.dtos.ClientSaveDTO;
 import com.studying.msclientes.application.services.ClientService;
-import com.studying.msclientes.domain.Client;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

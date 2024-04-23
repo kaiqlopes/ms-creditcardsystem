@@ -1,7 +1,7 @@
 package com.studying.mscreditevaluator.application.controller;
 
 import com.studying.mscreditevaluator.application.services.CreditEvaluatorService;
-import com.studying.mscreditevaluator.domain.model.ClientSituation;
+import com.studying.mscreditevaluator.application.dtos.ClientSituationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +22,10 @@ public class CreditEvaluatorController {
     }
 
     @GetMapping(value = "client-situation")
-    public ResponseEntity<ClientSituation> getClientSituation(@RequestParam("cpf") String cpf) {
-        ClientSituation result = creditEvaluatorService.getClientSituation(cpf);
+    public ResponseEntity<ClientSituationDTO> getClientSituation(@RequestParam("cpf") String cpf) {
+        ClientSituationDTO result = creditEvaluatorService.getClientSituation(cpf);
+
+        return ResponseEntity.ok(result);
     }
 
 }

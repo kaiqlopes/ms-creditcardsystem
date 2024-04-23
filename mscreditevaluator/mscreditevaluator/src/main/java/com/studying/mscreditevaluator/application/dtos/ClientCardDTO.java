@@ -1,4 +1,4 @@
-package com.studying.mscreditevaluator.domain.model;
+package com.studying.mscreditevaluator.application.dtos;
 
 import lombok.Data;
 
