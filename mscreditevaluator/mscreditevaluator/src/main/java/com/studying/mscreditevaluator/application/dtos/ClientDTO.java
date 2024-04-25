@@ -7,5 +7,6 @@ public class ClientDTO {
 
     private Long id;
     private String name;
+    private Integer age;
 
 }
