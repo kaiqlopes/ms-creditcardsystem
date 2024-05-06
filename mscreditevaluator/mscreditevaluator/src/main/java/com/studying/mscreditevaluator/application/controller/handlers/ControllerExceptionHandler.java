@@ -27,7 +27,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(MicroservicesCommunicationException.class)
-    public ResponseEntity<CustomError> microservicesCommunication(ResourceNotFoundException e, HttpServletRequest request) {
+    public ResponseEntity<CustomError> microservicesCommunication(MicroservicesCommunicationException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
         CustomError error = new CustomError(Instant.now(),
                 status.value(),

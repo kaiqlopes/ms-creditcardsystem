@@ -1,20 +1,22 @@
 package com.studying.mscreditevaluator.application.services;
 
 import com.studying.mscreditevaluator.application.dtos.*;
+import com.studying.mscreditevaluator.application.exceptions.BrokerCommunicationException;
+import com.studying.mscreditevaluator.application.exceptions.JsonConvertionException;
 import com.studying.mscreditevaluator.application.exceptions.MicroservicesCommunicationException;
 import com.studying.mscreditevaluator.application.exceptions.ResourceNotFoundException;
-import com.studying.mscreditevaluator.infra.Clients.CardControllerClient;
-import com.studying.mscreditevaluator.infra.Clients.ClientControllerClient;
+import com.studying.mscreditevaluator.infra.clients.CardControllerClient;
+import com.studying.mscreditevaluator.infra.clients.ClientControllerClient;
+import com.studying.mscreditevaluator.infra.mqueue.CardIssuanceSolicitationPublisher;
 import feign.FeignException;
-import feign.RetryableException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.amqp.AmqpIOException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.net.ConnectException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class CreditEvaluatorService {
 
     private final ClientControllerClient clientControllerClient;
     private final CardControllerClient cardControllerClient;
+    private final CardIssuanceSolicitationPublisher cardIssuancePublisher;
 
     public ClientSituationDTO getClientSituation(String cpf) {
         try {
@@ -33,9 +36,11 @@ public class CreditEvaluatorService {
                     .cards(clientCardResponse.getBody())
                     .build();
 
-        } catch (FeignException.FeignClientException e) {
+        }
+        catch (FeignException.FeignClientException e) {
             throw new ResourceNotFoundException("Resource not found with this CPF: " + cpf);
-        } catch (FeignException.ServiceUnavailable e) {
+        }
+        catch (FeignException.ServiceUnavailable e) {
             throw new MicroservicesCommunicationException("Responsible microservice is offline");
         }
     }
@@ -57,10 +62,26 @@ public class CreditEvaluatorService {
 
             return new EvaluatedClientResultDTO(clientCard);
 
-        } catch (FeignException.FeignClientException e) {
+        }
+        catch (FeignException.FeignClientException e) {
             throw new ResourceNotFoundException("Resource not found with this CPF: " + cpf);
-        } catch (FeignException.ServiceUnavailable e) {
+        }
+        catch (FeignException.ServiceUnavailable e) {
             throw new MicroservicesCommunicationException("Responsible microservice is offline");
+        }
+    }
+
+    public CardSolicitationProtocol cardIssuanceSolicitation(CardIssuanceSolicitationDataDTO data) {
+        try {
+            cardIssuancePublisher.cardSolicitation(data);
+            String protocol = UUID.randomUUID().toString();
+            return new CardSolicitationProtocol(protocol);
+        }
+        catch (JsonConvertionException e) {
+            throw new JsonConvertionException(e.getMessage());
+        }
+        catch (AmqpIOException e) {
+            throw new BrokerCommunicationException("Error with card solicitation: " + e.getMessage());
         }
     }
 }

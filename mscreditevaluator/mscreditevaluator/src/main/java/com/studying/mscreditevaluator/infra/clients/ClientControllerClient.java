@@ -1,4 +1,4 @@
-package com.studying.mscreditevaluator.infra.Clients;
+package com.studying.mscreditevaluator.infra.clients;
 
 import com.studying.mscreditevaluator.application.dtos.ClientDTO;
 import org.springframework.cloud.openfeign.FeignClient;

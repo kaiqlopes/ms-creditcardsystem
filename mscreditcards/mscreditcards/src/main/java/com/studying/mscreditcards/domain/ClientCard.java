@@ -21,4 +21,9 @@ public class ClientCard {
     private Card card;
     private BigDecimal clientLimit;
 
+    public ClientCard(String cpf, Card card, BigDecimal clientLimit) {
+        this.cpf = cpf;
+        this.card = card;
+        this.clientLimit = clientLimit;
+    }
 }

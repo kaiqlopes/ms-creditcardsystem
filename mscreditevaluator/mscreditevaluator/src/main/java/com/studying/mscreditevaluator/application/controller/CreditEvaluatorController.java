@@ -1,9 +1,7 @@
 package com.studying.mscreditevaluator.application.controller;
 
-import com.studying.mscreditevaluator.application.dtos.EvaluatedClientResultDTO;
-import com.studying.mscreditevaluator.application.dtos.EvaluationDataDTO;
+import com.studying.mscreditevaluator.application.dtos.*;
 import com.studying.mscreditevaluator.application.services.CreditEvaluatorService;
-import com.studying.mscreditevaluator.application.dtos.ClientSituationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +30,12 @@ public class CreditEvaluatorController {
         EvaluatedClientResultDTO evaluatedClientResult = creditEvaluatorService.evaluateClient(dto.getCpf(), dto.getIncome());
 
         return ResponseEntity.ok(evaluatedClientResult);
+    }
+
+    @PostMapping(value = "request-card")
+    public ResponseEntity<CardSolicitationProtocol> requestCard(@RequestBody CardIssuanceSolicitationDataDTO data) {
+        CardSolicitationProtocol protocol = creditEvaluatorService.cardIssuanceSolicitation(data);
+        return ResponseEntity.ok(protocol);
     }
 
 }

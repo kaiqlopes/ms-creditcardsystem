@@ -1,4 +1,4 @@
-package com.studying.mscreditevaluator.infra.Clients;
+package com.studying.mscreditevaluator.infra.clients;
 
 import com.studying.mscreditevaluator.application.dtos.CardDTO;
 import com.studying.mscreditevaluator.application.dtos.ClientCardDTO;
